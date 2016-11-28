@@ -7,7 +7,7 @@ This library has following features.
 
 * Run wsgi application with specified host and port.
 * Serving Static files.
-* Based click
+* Click based command line interface (See https://github.com/pallets/click).
 
 
 How to use
@@ -42,7 +42,7 @@ Static files
 
 Run wsgi application and serve static files:
 
-Create `static/style.css`:
+Create ``static/style.css``:
 
 .. code-block:: css
 
@@ -66,6 +66,7 @@ Requirements
 
 - Python 2.7 and Python 3.3 or later
 - click
+- wsgi-static-middleware
 
 License
 =======
