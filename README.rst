@@ -8,6 +8,9 @@ This library has following features.
 * Run wsgi application with specified host and port.
 * Serving Static files.
 * Click based command line interface (See https://github.com/pallets/click).
+* Live reloading.
+* Controlling the Log Level.
+* Several WSGI Server Support.
 
 
 How to use
@@ -60,6 +63,93 @@ And run:
       max-width: 980px;
    }
 
+
+Why WSGICLI?
+============
+
+While developing WSGI Application and WSGI Middleware, I encountered some troublesome scenes.
+I will explain it using actual code.
+
+.. code-block:: python
+
+   class SomeMiddleware:
+       def __init__(self, app):
+           self.app = app
+
+       def __call__(self, env, start_response):
+           return self.app(env, start_response)
+
+This is a very simple WSGI middleware.
+It is also fully compatible with the WSGI interface.
+Let's use this Middleware with various WSGI frameworks.
+
+
+In the case of Bottle
+---------------------
+
+.. code-block:: python
+
+   from bottle import Bottle
+   app = Bottle()
+
+   @app.route('/hello/<name>')
+   def index(name):
+       return 'Hello World!'
+
+   app = SomeMiddleware(app)
+
+   if __name__ == '__main__':
+      app.run(host='127.0.0.1', port=8000)
+
+
+As you can see, this program does not work.
+``SomeMiddleware`` is compatible with the WSGI Interface, but ``run`` method does not exist.
+
+However, ``app`` object satisfies the specification of WSGI, it can be executed using WSGI Server (gunicorn, etc.) as follows.
+
+.. code-block:: console
+
+   $ gunicorn -w main:app  -b 127.0.0.1:8000
+
+So, how does Bottle use WSGI middleware?
+
+.. code-block:: python
+
+   import bottle
+   app = SomeMiddleware(bottle.app())
+
+   @bottle.route('/')
+   def index():
+     return 'Hello World!'
+
+   if __name__ == '__main__':
+       bottle.run(app=app, host='127.0.0.1', port=8000)
+
+
+In Bottle, you can use WSGI Middleware by describing like this.
+But although Bottle is a Micro Framework, it spends a little bit of code to accomplish this.
+
+- https://github.com/bottlepy/bottle/blob/master/bottle.py#L3100-L3125
+- https://github.com/bottlepy/bottle/blob/master/bottle.py#L3541-L3644
+
+In the case of Flask
+--------------------
+
+Flask had similar problems until then.
+But Flask now provides a Command Line Interface based on Click from v0.11 (See `Flask documentation <http://flask.pocoo.org/docs/0.11/quickstart/#a-minimal-application>`_ ).
+This is a good idea.
+
+Thinking about the role of WSGI Framework
+-----------------------------------------
+
+The ``run()`` method is useful for running WSGI Applications in development.
+But is this really a function that the WSGI Framework should provide?
+
+In the Kobin WSGI Framework that I am developing, I decided not to provide functions like `run()`.
+Instead, Please use this library.
+
+This library is designed to be widely used in the development of WSGI applications.
+Please make use of your own WSGI Framework or projects that do not use WSGI Framework.
 
 Requirements
 ============
