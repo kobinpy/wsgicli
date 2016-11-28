@@ -1,0 +1,2 @@
+click
+wsgi-static-middleware

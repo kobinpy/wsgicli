@@ -1,0 +1,6 @@
+click==6.6
+flake8==3.2.1
+mccabe==0.5.2
+pycodestyle==2.2.0
+pyflakes==1.3.0
+wsgi-static-middleware==0.0.8
