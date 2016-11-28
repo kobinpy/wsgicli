@@ -38,5 +38,5 @@ setup(
     license=__license__,
     include_package_data=True,
     test_suite='tests',
-    entry_points={'console_scripts': ['wsgicli = wsgicli:main']},
+    entry_points={'console_scripts': ['wsgicli = wsgicli:cmd']},
 )

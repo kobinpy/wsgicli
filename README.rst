@@ -5,12 +5,10 @@ WSGICLI
 Command Line Interface for developing WSGI application.
 This library has following features.
 
-* Run wsgi application with specified host and port.
-* Serving Static files.
-* Click based command line interface (See https://github.com/pallets/click).
-* Live reloading.
-* Controlling the Log Level.
-* Several WSGI Server Support.
+* [x] Run wsgi application with specified host and port.
+* [x] Serving Static files.
+* [ ] Live reloading.
+* [ ] Several WSGI Server Support with abstract base classes.
 
 
 How to use
