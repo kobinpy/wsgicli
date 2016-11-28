@@ -15,8 +15,6 @@ __classifiers__ = (
     'Topic :: Internet :: WWW/HTTP :: WSGI',
     'Environment :: Web Environment',
     'Programming Language :: Python',
-    'Programming Language :: Python :: 2',
-    'Programming Language :: Python :: 2.7',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4',
@@ -40,4 +38,5 @@ setup(
     license=__license__,
     include_package_data=True,
     test_suite='tests',
+    entry_points={'console_scripts': ['wsgicli = wsgicli:main']},
 )

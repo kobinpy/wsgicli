@@ -31,13 +31,13 @@ Run this application using wsgiref:
 
 .. code-block:: console
 
-   $ wsgicli main:app
+   $ wsgicli run main:app
 
 Run this application in specified host(default: localhost) and port(default: 8000):
 
 .. code-block:: console
 
-   $ wsgicli main:app -h 0.0.0.0 -p 8080
+   $ wsgicli run main:app -h 0.0.0.0 -p 8080
 
 
 Static files
@@ -63,6 +63,19 @@ And run:
       max-width: 980px;
    }
 
+
+Environment Variables
+---------------------
+
+.. code-block:: shell
+
+   $ export WSGICLI_TARGET=main:app
+   $ export WSGICLI_PORT=80
+   $ export WSGICLI_HOST=127.0.0.1
+   $ export WSGICLI_RELOAD=  # If this is none, the server is no reload when the codes are changed.
+   $ export WSGICLI_STATIC_ROOT=static
+   $ export WSGICLI_STATIC_DIRS=`PWD`/static
+   $ wsgicli run
 
 Why WSGICLI?
 ============
@@ -154,7 +167,7 @@ Please make use of your own WSGI Framework or projects that do not use WSGI Fram
 Requirements
 ============
 
-- Python 2.7 and Python 3.3 or later
+- Python 3.3 or later
 - click
 - wsgi-static-middleware
 
