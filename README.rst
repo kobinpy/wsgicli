@@ -76,18 +76,38 @@ refs:
 * https://github.com/vmprof/vmprof-python
 * https://github.com/vmprof/vmprof-server
 
+Arguments and Options
+=====================
+
+Arguments
+---------
+
+1. ``file`` : File path for your wsgi application.
+2. ``obj`` : The variable name of your wsgi application object.
+
+Options
+-------
+
+- ``-p`` ``--port`` : Port number for your WSGI Application (default: ``8000``).
+- ``-h`` ``--host`` : Host Address (default: ``127.0.0.1``).
+- ``--reload`` / ``--no-reload`` : Enable auto reloading. (default: ``--no-reload``).
+- ``--enable-static`` / ``--no-enable-static`` : Enable static file serving (default: ``--no-enable-static``).
+- ``--staticroot`` : URL path to static files (default: ``/static/``).
+- ``--staticdirs`` : Directory path to static files (default: ``./static``, multiple=true).
+- ``--enable-profile`` / ``--no-enable-profile`` : Enable vmprof profiling (default: ``--no-enable-profile``).
+- ``--profile-port`` : Port number for vmprof server (default: ``8080``).
+
 Environment Variables
 ---------------------
 
-.. code-block:: shell
-
-   $ export WSGICLI_TARGET=main:app
-   $ export WSGICLI_PORT=80
-   $ export WSGICLI_HOST=127.0.0.1
-   $ export WSGICLI_RELOAD=  # If this is none, the server is no reload when the codes are changed.
-   $ export WSGICLI_STATIC_ROOT=static
-   $ export WSGICLI_STATIC_DIRS=`PWD`/static
-   $ wsgicli run
+- ``WSGICLI_TARGET``
+- ``WSGICLI_PORT``
+- ``WSGICLI_HOST``
+- ``WSGICLI_RELOAD``
+- ``WSGICLI_STATIC_ROOT``
+- ``WSGICLI_STATIC_DIRS``
+- ``WSGICLI_PROFILE``
+- ``WSGICLI_PROFILE_PORT``
 
 Why WSGICLI?
 ============
