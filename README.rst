@@ -9,7 +9,7 @@ This library has following features.
 * [x] Serving Static files.
 * [ ] Live reloading.
 * [ ] Several WSGI Server Support with abstract base classes.
-
+* [ ] vmprof profiler.
 
 How to use
 ==========
@@ -61,6 +61,20 @@ And run:
       max-width: 980px;
    }
 
+
+vmprof profiler
+---------------
+
+Using vmprof and vmprof-server.
+
+.. code-block:: console
+
+   $ wsgicli main:app -p 8000 --enable-profile --profile-port 8080
+
+refs:
+
+* https://github.com/vmprof/vmprof-python
+* https://github.com/vmprof/vmprof-server
 
 Environment Variables
 ---------------------
