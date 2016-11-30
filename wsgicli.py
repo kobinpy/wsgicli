@@ -121,11 +121,11 @@ def run_live_reloading_server(interval, app, host, port):
 @click.argument('wsgiapp', nargs=1)
 @click.option('--host', '-h', default='127.0.0.1', help='The interface to bind to.')
 @click.option('--port', '-p', default=8000, help='The port to bind to.')
-@click.option('--reload/--no-reload', default=None, help='Reloading')
+@click.option('--reload/--no-reload', default=None, help='Enable live reloading')
 @click.option('--interval', type=click.INT, default=1,
               help='Interval time to check file changed for reloading')
-@click.option('--static/--no-static', default=None, help='Static file serving')
-@click.option('--static-root', default='static', help='Static root')
+@click.option('--static/--no-static', default=None, help='Enable static file serving')
+@click.option('--static-root', default='static', help='URL path to static files')
 @click.option('--static-dirs', default=['./static/'], multiple=True,
               help='Directories for static files')
 def cmd(filepath, wsgiapp, host, port, reload, interval, static, static_root, static_dirs):

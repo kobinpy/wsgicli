@@ -55,7 +55,7 @@ And run:
 
 .. code-block:: console
 
-   $ wsgicli main.py app -p 8000 --static --staticroot static --staticdir static/
+   $ wsgicli main.py app -p 8000 --static --staticroot static --staticdirs static/
    $ curl http://localhost:8000/static/main.css
    .container {
       max-width: 980px;
@@ -90,13 +90,13 @@ Arguments
 Options
 -------
 
-- ``-p`` ``--port`` : Port number for your WSGI Application (default: ``8000``).
-- ``-h`` ``--host`` : Host Address (default: ``127.0.0.1``).
-- ``--reload`` / ``--no-reload`` : Enable auto reloading (default: ``--no-reload``).
+- ``-h`` ``--host`` : The interface to bind to. (default: ``127.0.0.1``).
+- ``-p`` ``--port`` : The port to bind to. (default: ``8000``).
+- ``--reload`` / ``--no-reload`` : Enable live reloading (default: ``--no-reload``).
 - ``--interval`` : Interval time to check file changed for reloading (default: ``1``).
 - ``--static`` / ``--no-static`` : Enable static file serving (default: ``--no-static``).
 - ``--staticroot`` : URL path to static files (default: ``/static/``).
-- ``--staticdirs`` : Directory path to static files (default: ``./static``, multiple=true).
+- ``--staticdirs`` : Directories to static files (default: ``./static``, multiple=true).
 - ``--profile`` / ``--no-profile`` : Enable vmprof profiling (default: ``--no-profile``).
 - ``--profile-port`` : Port number for vmprof server (default: ``8080``).
 
