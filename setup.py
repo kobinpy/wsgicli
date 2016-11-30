@@ -1,5 +1,5 @@
 import os
-from setuptools import setup, find_packages
+from setuptools import setup
 
 BASE_PATH = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(BASE_PATH, 'README.rst')).read()
@@ -32,7 +32,7 @@ setup(
     description='',
     long_description=README,
     classifiers=__classifiers__,
-    packages=find_packages(exclude=['test*']),
+    py_modules=['wsgicli'],
     install_requires=['click', 'wsgi-static-middleware'],
     keywords='web framework wsgi',
     license=__license__,
