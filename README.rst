@@ -90,7 +90,8 @@ Options
 
 - ``-p`` ``--port`` : Port number for your WSGI Application (default: ``8000``).
 - ``-h`` ``--host`` : Host Address (default: ``127.0.0.1``).
-- ``--reload`` / ``--no-reload`` : Enable auto reloading. (default: ``--no-reload``).
+- ``--reload`` / ``--no-reload`` : Enable auto reloading (default: ``--no-reload``).
+- ``--interval`` : Interval time to check file changed for reloading (default: ``1``).
 - ``--enable-static`` / ``--disable-static`` : Enable static file serving (default: ``--no-enable-static``).
 - ``--staticroot`` : URL path to static files (default: ``/static/``).
 - ``--staticdirs`` : Directory path to static files (default: ``./static``, multiple=true).
