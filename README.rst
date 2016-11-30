@@ -8,8 +8,8 @@ This library has following features.
 * [x] Run wsgi application with specified host and port.
 * [x] Serving Static files.
 * [x] Live reloading.
-* [ ] Several WSGI Server Support with abstract base classes.
 * [ ] vmprof profiler.
+* [ ] Several WSGI Servers Support with providing abstract base classes.
 
 How to use
 ==========

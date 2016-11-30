@@ -21,12 +21,12 @@ def run_server(app, host, port):
 #####################################################################################
 # For reloading server when detected python files changes.
 #####################################################################################
-# FileCheckerThread class is copied and pasted from
-#  https://github.com/bottlepy/bottle/blob/master/bottle.py#L3647-L3686
 EXIT_STATUS_RELOAD = 3
 
 
 class FileCheckerThread(threading.Thread):
+    # This class is copied and pasted from following source code of Bottle.
+    #   https://github.com/bottlepy/bottle/blob/master/bottle.py#L3647-L3686
     """ Interrupt main-thread as soon as a changed module file is detected,
         the lockfile gets deleted or gets too old. """
 
@@ -129,7 +129,17 @@ def run_live_reloading_server(interval, app, host, port):
 @click.option('--static-dirs', default=['./static/'], multiple=True,
               help='Directories for static files')
 def cmd(filepath, wsgiapp, host, port, reload, interval, static, static_root, static_dirs):
-    """Runs a development server for WSGI Application"""
+    """
+    Runs a development server for WSGI Application.
+
+    Usage:
+
+        $ wsgicli hello.py app -h 0.0.0.0 -p 5000
+
+        $ wsgicli hello.py app --reload
+
+        $ wsgicli hello.py app --static --static-root /static/ --static-dirs ./static/
+    """
     module = SourceFileLoader('module', filepath).load_module()
     app = getattr(module, wsgiapp)
 
