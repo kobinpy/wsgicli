@@ -118,8 +118,9 @@ def run_live_reloading_server(interval, app, host, port):
 @click.command()
 @click.argument('filepath', nargs=1)
 @click.argument('wsgiapp', nargs=1)
-@click.option('--host', '-h', default='127.0.0.1', help='The interface to bind to.')
-@click.option('--port', '-p', default=8000, help='The port to bind to.')
+@click.option('--host', '-h', type=click.STRING, default='127.0.0.1',
+              help='The interface to bind to.')
+@click.option('--port', '-p', type=click.INT, default=8000, help='The port to bind to.')
 @click.option('--reload/--no-reload', default=None, help='Enable live reloading')
 @click.option('--interval', type=click.INT, default=1,
               help='Interval time to check file changed for reloading')
