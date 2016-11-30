@@ -5,7 +5,6 @@ import sys
 import time
 import threading
 import _thread
-from wsgi_static_middleware import StaticMiddleware
 from wsgiref.simple_server import make_server
 
 
@@ -128,7 +127,10 @@ def run_live_reloading_server(interval, app, host, port):
 @click.option('--static-root', default='static', help='URL path to static files')
 @click.option('--static-dirs', default=['./static/'], multiple=True,
               help='Directories for static files')
-def cmd(filepath, wsgiapp, host, port, reload, interval, static, static_root, static_dirs):
+@click.option('--lineprof/--no-lineprof', help='Enable line profiler')
+@click.option('--lineprof-file', multiple=True, help='The filename profiled by line-profiler')
+def cmd(filepath, wsgiapp, host, port, reload, interval,
+        static, static_root, static_dirs, lineprof, lineprof_file):
     """
     Runs a development server for WSGI Application.
 
@@ -139,12 +141,28 @@ def cmd(filepath, wsgiapp, host, port, reload, interval, static, static_root, st
         $ wsgicli hello.py app --reload
 
         $ wsgicli hello.py app --static --static-root /static/ --static-dirs ./static/
+
+        $ wsgicli hello.py app --lineprof
     """
     module = SourceFileLoader('module', filepath).load_module()
     app = getattr(module, wsgiapp)
 
     if static:
+        from wsgi_static_middleware import StaticMiddleware
         app = StaticMiddleware(app, static_root=static_root, static_dirs=static_dirs)
+
+    if lineprof:
+        # Caution: wsgi-lineprof is still pre-alpha. Except breaking API Changes.
+        from wsgi_lineprof.middleware import LineProfilerMiddleware
+        from wsgi_lineprof.filters import FilenameFilter, TotalTimeSorter
+
+        if lineprof_file:
+            # Now wsgi-lineprof is now supported only 1 file checking.
+            lineprof_file = lineprof_file[0]
+        else:
+            lineprof_file = filepath.split('/')[-1] if '/' in filepath else filepath
+        filters = [FilenameFilter(lineprof_file), TotalTimeSorter()]
+        app = LineProfilerMiddleware(app, filters=filters)
 
     if reload:
         run_live_reloading_server(interval, app=app, host=host, port=port)

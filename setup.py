@@ -33,7 +33,7 @@ setup(
     long_description=README,
     classifiers=__classifiers__,
     py_modules=['wsgicli'],
-    install_requires=['click', 'wsgi-static-middleware'],
+    install_requires=['click', 'wsgi-static-middleware', 'wsgi_lineprof'],
     keywords='web framework wsgi',
     license=__license__,
     include_package_data=True,

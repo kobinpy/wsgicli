@@ -8,7 +8,7 @@ This library has following features.
 * [x] Run wsgi application with specified host and port.
 * [x] Serving Static files.
 * [x] Live reloading.
-* [ ] vmprof profiler.
+* [x] line profiler.
 * [ ] Several WSGI Servers Support with providing abstract base classes.
 
 How to use
@@ -62,6 +62,39 @@ And run:
    }
 
 
+line profiler
+-------------
+
+Thanks to `rkern/line_profiler <https://github.com/rkern/line_profiler>`_ and `ymyzk/wsgi_lineprof <https://github.com/ymyzk/wsgi_lineprof>`_ :)
+Usage is like this:
+
+.. code-block:: console
+
+   $ wsgicli main.py app -p 8000 --lineprof
+   Start: 127.0.0.1:8000
+
+   Time unit: 1e-06 [sec]
+
+   File: wsgi_lineprof_example.py
+   Name: index
+   Total time: 1.0027 [sec]
+     Line      Hits         Time  Code
+   ===================================
+       47                         @app.route('/')
+       48                         def index():
+       49         1      1002693      name = get_name()
+       50         1            7      return "Hello, {}!!".format(name)
+
+   File: wsgi_lineprof_example.py
+   Name: get_name
+   Total time: 1.00267 [sec]
+     Line      Hits         Time  Code
+   ===================================
+       41                         def get_name():
+       42                             # Get some data...
+       43         1      1002670      time.sleep(1)
+       44         1            3      return "Monty Python"
+
 vmprof profiler
 ---------------
 
@@ -71,12 +104,11 @@ Using vmprof and vmprof-server.
 
 .. code-block:: console
 
-   $ wsgicli main.py app -p 8000 --enable-profile --profile-port 8080
+   $ wsgicli main.py app -p 8000 --vsprof
 
 refs:
 
 * https://github.com/vmprof/vmprof-python
-* https://github.com/vmprof/vmprof-server
 
 Arguments and Options
 =====================
@@ -97,8 +129,8 @@ Options
 - ``--static`` / ``--no-static`` : Enable static file serving (default: ``--no-static``).
 - ``--staticroot`` : URL path to static files (default: ``/static/``).
 - ``--staticdirs`` : Directories to static files (default: ``./static``, multiple=true).
-- ``--profile`` / ``--no-profile`` : Enable vmprof profiling (default: ``--no-profile``).
-- ``--profile-port`` : Port number for vmprof server (default: ``8080``).
+- ``--lineprof/--no-lineprof`` : Enable line profiler.
+- ``--lineprof-file`` : The target for lineprof (default: your wsgi application file name).
 
 Environment Variables
 ---------------------
