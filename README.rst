@@ -5,6 +5,9 @@ WSGICLI
 Command Line Interface for developing WSGI application.
 This library has following features.
 
+.. image:: https://raw.githubusercontent.com/c-bata/wsgicli/master/resources/wsgicli-profiling-demo.gif
+   :alt: live reloading and profiling demo
+
 * [x] Run wsgi application with specified host and port.
 * [x] Serving Static files.
 * [x] Live reloading.
@@ -62,6 +65,16 @@ And run:
    }
 
 
+Live Reloading
+--------------
+
+.. code-block:: console
+
+   $ wsgicli main.py app --reload
+
+.. image:: https://raw.githubusercontent.com/c-bata/wsgicli/master/resources/wsgicli-live-reloading-demo.gif
+   :alt: live reloading demo
+
 line profiler
 -------------
 
@@ -94,6 +107,10 @@ Usage is like this:
        42                             # Get some data...
        43         1      1002670      time.sleep(1)
        44         1            3      return "Monty Python"
+
+
+.. image:: https://raw.githubusercontent.com/c-bata/wsgicli/master/resources/wsgicli-profiling-demo.gif
+   :alt: live reloading demo
 
 vmprof profiler
 ---------------
