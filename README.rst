@@ -7,7 +7,7 @@ This library has following features.
 
 * [x] Run wsgi application with specified host and port.
 * [x] Serving Static files.
-* [ ] Live reloading.
+* [x] Live reloading.
 * [ ] Several WSGI Server Support with abstract base classes.
 * [ ] vmprof profiler.
 

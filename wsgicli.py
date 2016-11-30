@@ -12,7 +12,8 @@ from wsgiref.simple_server import make_server
 #####################################################################################
 # For run server
 #####################################################################################
-def run_server(host, port, app):
+def run_server(app, host, port):
+    print('Start: {host}:{port}'.format(host=host, port=port))
     httpd = make_server(host, port, app)
     httpd.serve_forever()
 
@@ -68,28 +69,8 @@ class FileCheckerThread(threading.Thread):
         return exc_type is not None and issubclass(exc_type, KeyboardInterrupt)
 
 
-def run_live_reloading_server():
-    pass
-
-
-#####################################################################################
-# Command Line Interface
-#####################################################################################
-@click.command()
-@click.argument('filepath', nargs=1)
-@click.argument('wsgiapp', nargs=1)
-@click.option('--host', '-h', default='127.0.0.1', help='The interface to bind to.')
-@click.option('--port', '-p', default=8000, help='The port to bind to.')
-@click.option('--reload/--no-reload', default=None, help='Reloading')
-@click.option('--interval', type=click.INT, default=1,
-              help='Interval time to check file changed for reloading')
-@click.option('--enable-static/--disable-static', default=None, help='Static file serving')
-@click.option('--static-root', default='static', help='Static root')
-@click.option('--static-dirs', default=['./static/'], multiple=True,
-              help='Directories for static files')
-def cmd(filepath, wsgiapp, host, port, reload, interval, enable_static, static_root, static_dirs):
-    """Runs a development server for WSGI Application"""
-    if reload and not os.environ.get('WSGICLI_CHILD'):
+def run_live_reloading_server(interval, app, host, port):
+    if not os.environ.get('WSGICLI_CHILD'):
         import subprocess
         import tempfile
         lockfile = None
@@ -116,30 +97,50 @@ def cmd(filepath, wsgiapp, host, port, reload, interval, enable_static, static_r
                 os.unlink(lockfile)
         return
 
+    try:
+        lockfile = os.environ.get('WSGICLI_LOCKFILE')
+        bgcheck = FileCheckerThread(lockfile, interval)
+        with bgcheck:
+            run_server(app=app, host=host, port=port)
+        if bgcheck.status == 'reload':
+            sys.exit(EXIT_STATUS_RELOAD)
+    except KeyboardInterrupt:
+        pass
+    except (SystemExit, MemoryError):
+        raise
+    except:
+        time.sleep(interval)
+        sys.exit(3)
+
+
+#####################################################################################
+# Command Line Interface
+#####################################################################################
+@click.command()
+@click.argument('filepath', nargs=1)
+@click.argument('wsgiapp', nargs=1)
+@click.option('--host', '-h', default='127.0.0.1', help='The interface to bind to.')
+@click.option('--port', '-p', default=8000, help='The port to bind to.')
+@click.option('--reload/--no-reload', default=None, help='Reloading')
+@click.option('--interval', type=click.INT, default=1,
+              help='Interval time to check file changed for reloading')
+@click.option('--enable-static/--disable-static', default=None, help='Static file serving')
+@click.option('--static-root', default='static', help='Static root')
+@click.option('--static-dirs', default=['./static/'], multiple=True,
+              help='Directories for static files')
+def cmd(filepath, wsgiapp, host, port, reload, interval, enable_static, static_root, static_dirs):
+    """Runs a development server for WSGI Application"""
     module = SourceFileLoader('module', filepath).load_module()
     app = getattr(module, wsgiapp)
 
     if enable_static:
         app = StaticMiddleware(app, static_root=static_root, static_dirs=static_dirs)
 
-    try:
-        if reload:
-            lockfile = os.environ.get('WSGICLI_LOCKFILE')
-            bgcheck = FileCheckerThread(lockfile, interval)
-            with bgcheck:
-                print('Start: {host}, {port}'.format(host=host, port=port))
-                run_server(host, port, app)
-            if bgcheck.status == 'reload':
-                sys.exit(EXIT_STATUS_RELOAD)
-    except KeyboardInterrupt:
-        pass
-    except (SystemExit, MemoryError):
-        raise
-    except:
-        if not reload:
-            raise
-        time.sleep(interval)
-        sys.exit(3)
+    if reload:
+        run_live_reloading_server(interval, app=app, host=host, port=port)
+    else:
+        run_server(app=app, host=host, port=port)
+
 
 if __name__ == '__main__':
     cmd()
