@@ -75,15 +75,14 @@ target/
 # celery beat schedule file
 celerybeat-schedule
 
-# dotenv
+# dotenv, direnv
 .env
+.envrc
+
+# my snippets for learning python
+.snippets
 
 # virtualenv
 venv/
 ENV/
 
-# Spyder project settings
-.spyderproject
-
-# Rope project settings
-.ropeproject
