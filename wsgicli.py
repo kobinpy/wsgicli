@@ -124,16 +124,16 @@ def run_live_reloading_server(interval, app, host, port):
 @click.option('--reload/--no-reload', default=None, help='Reloading')
 @click.option('--interval', type=click.INT, default=1,
               help='Interval time to check file changed for reloading')
-@click.option('--enable-static/--disable-static', default=None, help='Static file serving')
+@click.option('--static/--no-static', default=None, help='Static file serving')
 @click.option('--static-root', default='static', help='Static root')
 @click.option('--static-dirs', default=['./static/'], multiple=True,
               help='Directories for static files')
-def cmd(filepath, wsgiapp, host, port, reload, interval, enable_static, static_root, static_dirs):
+def cmd(filepath, wsgiapp, host, port, reload, interval, static, static_root, static_dirs):
     """Runs a development server for WSGI Application"""
     module = SourceFileLoader('module', filepath).load_module()
     app = getattr(module, wsgiapp)
 
-    if enable_static:
+    if static:
         app = StaticMiddleware(app, static_root=static_root, static_dirs=static_dirs)
 
     if reload:

@@ -55,7 +55,7 @@ And run:
 
 .. code-block:: console
 
-   $ wsgicli main.py app -p 8000 --staticroot static --staticdir static/
+   $ wsgicli main.py app -p 8000 --static --staticroot static --staticdir static/
    $ curl http://localhost:8000/static/main.css
    .container {
       max-width: 980px;
@@ -64,6 +64,8 @@ And run:
 
 vmprof profiler
 ---------------
+
+**Still Not Implemented**
 
 Using vmprof and vmprof-server.
 
@@ -92,19 +94,23 @@ Options
 - ``-h`` ``--host`` : Host Address (default: ``127.0.0.1``).
 - ``--reload`` / ``--no-reload`` : Enable auto reloading (default: ``--no-reload``).
 - ``--interval`` : Interval time to check file changed for reloading (default: ``1``).
-- ``--enable-static`` / ``--disable-static`` : Enable static file serving (default: ``--no-enable-static``).
+- ``--static`` / ``--no-static`` : Enable static file serving (default: ``--no-static``).
 - ``--staticroot`` : URL path to static files (default: ``/static/``).
 - ``--staticdirs`` : Directory path to static files (default: ``./static``, multiple=true).
-- ``--enable-profile`` / ``--disable-profile`` : Enable vmprof profiling (default: ``--no-enable-profile``).
+- ``--profile`` / ``--no-profile`` : Enable vmprof profiling (default: ``--no-profile``).
 - ``--profile-port`` : Port number for vmprof server (default: ``8080``).
 
 Environment Variables
 ---------------------
 
+**Still Not Implemented**
+
 - ``WSGICLI_TARGET``
 - ``WSGICLI_PORT``
 - ``WSGICLI_HOST``
 - ``WSGICLI_RELOAD``
+- ``WSGICLI_RELOAD_INTERVAL``
+- ``WSGICLI_STATIC``
 - ``WSGICLI_STATIC_ROOT``
 - ``WSGICLI_STATIC_DIRS``
 - ``WSGICLI_PROFILE``
