@@ -29,13 +29,13 @@ Run this application using wsgiref:
 
 .. code-block:: console
 
-   $ wsgicli run main:app
+   $ wsgicli main.py app
 
 Run this application in specified host(default: localhost) and port(default: 8000):
 
 .. code-block:: console
 
-   $ wsgicli run main:app -h 0.0.0.0 -p 8080
+   $ wsgicli main.py app -h 0.0.0.0 -p 8080
 
 
 Static files
@@ -55,7 +55,7 @@ And run:
 
 .. code-block:: console
 
-   $ wsgicli main:app -p 8000 --staticroot static --staticdir static/
+   $ wsgicli main.py app -p 8000 --staticroot static --staticdir static/
    $ curl http://localhost:8000/static/main.css
    .container {
       max-width: 980px;
@@ -69,7 +69,7 @@ Using vmprof and vmprof-server.
 
 .. code-block:: console
 
-   $ wsgicli main:app -p 8000 --enable-profile --profile-port 8080
+   $ wsgicli main.py app -p 8000 --enable-profile --profile-port 8080
 
 refs:
 
@@ -91,10 +91,10 @@ Options
 - ``-p`` ``--port`` : Port number for your WSGI Application (default: ``8000``).
 - ``-h`` ``--host`` : Host Address (default: ``127.0.0.1``).
 - ``--reload`` / ``--no-reload`` : Enable auto reloading. (default: ``--no-reload``).
-- ``--enable-static`` / ``--no-enable-static`` : Enable static file serving (default: ``--no-enable-static``).
+- ``--enable-static`` / ``--disable-static`` : Enable static file serving (default: ``--no-enable-static``).
 - ``--staticroot`` : URL path to static files (default: ``/static/``).
 - ``--staticdirs`` : Directory path to static files (default: ``./static``, multiple=true).
-- ``--enable-profile`` / ``--no-enable-profile`` : Enable vmprof profiling (default: ``--no-enable-profile``).
+- ``--enable-profile`` / ``--disable-profile`` : Enable vmprof profiling (default: ``--no-enable-profile``).
 - ``--profile-port`` : Port number for vmprof server (default: ``8080``).
 
 Environment Variables

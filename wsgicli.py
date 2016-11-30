@@ -5,20 +5,20 @@ from importlib.machinery import SourceFileLoader
 
 
 @click.command()
-@click.argument('filepath', type=click.File(), nargs=1)
+@click.argument('filepath', nargs=1)
 @click.argument('wsgiapp', nargs=1)
 @click.option('--host', '-h', default='127.0.0.1', help='The interface to bind to.')
 @click.option('--port', '-p', default=8000, help='The port to bind to.')
 @click.option('--enable-static/--disable-static', default=None, help='Static file serving')
 @click.option('--static-root', default='static', help='Static root')
-@click.option('--static-dir', default='./static/', multiple=True,
+@click.option('--static-dirs', default=['./static/'], multiple=True,
               help='Directories for static files')
-def cmd(filepath, wsgiapp, host, port, enable_static, static_root, static_dir):
+def cmd(filepath, wsgiapp, host, port, enable_static, static_root, static_dirs):
     """Runs a development server for WSGI Application"""
-    module = SourceFileLoader('app', filepath).load_module()
+    module = SourceFileLoader('module', filepath).load_module()
     app = getattr(module, wsgiapp)
     if enable_static:
-        app = StaticMiddleware(app, static_root=static_root, static_dirs=static_dir)
+        app = StaticMiddleware(app, static_root=static_root, static_dirs=static_dirs)
     httpd = make_server(host, port, app)
     httpd.serve_forever()
 
