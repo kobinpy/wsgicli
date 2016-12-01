@@ -74,7 +74,7 @@ Live Reloading
 
    $ wsgicli main.py app --reload
 
-.. image:: https://raw.githubusercontent.com/c-bata/wsgicli/master/resources/wsgicli-live-reloading-demo.gif
+.. image:: https://raw.githubusercontent.com/kobinpy/wsgicli/master/resources/wsgicli-live-reloading-demo.gif
    :alt: live reloading demo
    :align: center
 
