@@ -2,6 +2,12 @@
 WSGICLI
 =======
 
+.. image:: https://travis-ci.org/kobinpy/wsgicli.svg?branch=master
+    :target: https://travis-ci.org/kobinpy/wsgicli
+
+.. image:: https://badge.fury.io/py/wsgicli.svg
+    :target: https://badge.fury.io/py/wsgicli
+
 Command Line Interface for developing WSGI application.
 This library has following features.
 
