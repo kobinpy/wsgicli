@@ -29,7 +29,7 @@ setup(
     version=__version__,
     author=__author__,
     author_email=__author_email__,
-    url='https://github.com/c-bata/wsgicli',
+    url='https://github.com/kobinpy/wsgicli',
     description='Command Line Interface for developing WSGI application.',
     long_description=README,
     classifiers=__classifiers__,
