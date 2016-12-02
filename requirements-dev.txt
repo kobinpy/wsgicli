@@ -3,3 +3,8 @@ twine
 wheel
 ipdb
 
+# Interpreter
+ipython
+bpython
+ptpython
+ptipython
