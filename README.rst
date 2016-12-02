@@ -34,13 +34,13 @@ Run this application using wsgiref:
 
 .. code-block:: console
 
-   $ wsgicli main.py app
+   $ wsgicli run main.py app
 
 Run this application in specified host(default: localhost) and port(default: 8000):
 
 .. code-block:: console
 
-   $ wsgicli main.py app -h 0.0.0.0 -p 8080
+   $ wsgicli run main.py app -h 0.0.0.0 -p 8080
 
 
 Static files
@@ -60,7 +60,7 @@ And run:
 
 .. code-block:: console
 
-   $ wsgicli main.py app -p 8000 --static --staticroot static --staticdirs static/
+   $ wsgicli run main.py app -p 8000 --static --staticroot static --staticdirs static/
    $ curl http://localhost:8000/static/main.css
    .container {
       max-width: 980px;
@@ -72,7 +72,7 @@ Live Reloading
 
 .. code-block:: console
 
-   $ wsgicli main.py app --reload
+   $ wsgicli run main.py app --reload
 
 .. image:: https://raw.githubusercontent.com/kobinpy/wsgicli/master/resources/wsgicli-live-reloading-demo.gif
    :alt: live reloading demo
@@ -86,7 +86,7 @@ Usage is like this:
 
 .. code-block:: console
 
-   $ wsgicli main.py app -p 8000 --lineprof
+   $ wsgicli run main.py app -p 8000 --lineprof
    Start: 127.0.0.1:8000
 
    Time unit: 1e-06 [sec]
@@ -121,7 +121,7 @@ Using vmprof and vmprof-server.
 
 .. code-block:: console
 
-   $ wsgicli main.py app -p 8000 --vsprof
+   $ wsgicli run main.py app -p 8000 --vsprof
 
 refs:
 

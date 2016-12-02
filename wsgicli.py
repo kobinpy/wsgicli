@@ -9,17 +9,23 @@ from wsgiref.simple_server import make_server
 
 
 #####################################################################################
+# Command Line Interface
+#####################################################################################
+@click.group()
+def cli():
+    pass
+
+
+#####################################################################################
 # For run server
 #####################################################################################
 def run_server(app, host, port):
-    print('Start: {host}:{port}'.format(host=host, port=port))
+    click.echo('Start: {host}:{port}'.format(host=host, port=port))
     httpd = make_server(host, port, app)
     httpd.serve_forever()
 
 
-#####################################################################################
 # For reloading server when detected python files changes.
-#####################################################################################
 EXIT_STATUS_RELOAD = 3
 
 
@@ -112,10 +118,7 @@ def run_live_reloading_server(interval, app, host, port):
         sys.exit(3)
 
 
-#####################################################################################
-# Command Line Interface
-#####################################################################################
-@click.command()
+@cli.command()
 @click.argument('filepath', nargs=1)
 @click.argument('wsgiapp', nargs=1)
 @click.option('--host', '-h', type=click.STRING, default='127.0.0.1',
@@ -130,20 +133,20 @@ def run_live_reloading_server(interval, app, host, port):
               help='Directories for static files')
 @click.option('--lineprof/--no-lineprof', help='Enable line profiler')
 @click.option('--lineprof-file', multiple=True, help='The filename profiled by line-profiler')
-def cmd(filepath, wsgiapp, host, port, reload, interval,
+def run(filepath, wsgiapp, host, port, reload, interval,
         static, static_root, static_dirs, lineprof, lineprof_file):
     """
     Runs a development server for WSGI Application.
 
     Usage:
 
-        $ wsgicli hello.py app -h 0.0.0.0 -p 5000
+        $ wsgicli run hello.py app -h 0.0.0.0 -p 5000
 
-        $ wsgicli hello.py app --reload
+        $ wsgicli run hello.py app --reload
 
-        $ wsgicli hello.py app --static --static-root /static/ --static-dirs ./static/
+        $ wsgicli run hello.py app --static --static-root /static/ --static-dirs ./static/
 
-        $ wsgicli hello.py app --lineprof
+        $ wsgicli run hello.py app --lineprof
     """
     module = SourceFileLoader('module', filepath).load_module()
     app = getattr(module, wsgiapp)
@@ -171,5 +174,78 @@ def cmd(filepath, wsgiapp, host, port, reload, interval,
         run_server(app=app, host=host, port=port)
 
 
+#####################################################################################
+# For run shell
+#####################################################################################
+def run_plain(imported_objects):
+    import code
+    code.interact(local=imported_objects)
+
+
+def run_ipython(imported_objects):
+    # Start IPython >= 1.0
+    from IPython import start_ipython
+    start_ipython(argv=[], user_ns=imported_objects)
+
+
+def run_bpython(imported_objects):
+    from bpython import embed
+    embed(imported_objects)
+
+
+def run_ptpython(imported_objects, vi_mode=False):
+    from ptpython.repl import embed, run_config
+    history_filename = os.path.expanduser('~/.ptpython_history')
+    embed(globals=imported_objects, history_filename=history_filename,
+          vi_mode=vi_mode, configure=run_config)
+
+
+def run_ptipython(imported_objects, vi_mode=False):
+    from ptpython.repl import run_config
+    from ptpython.ipython import embed
+    history_filename = os.path.expanduser('~/.ptpython_history')
+    embed(user_ns=imported_objects, history_filename=history_filename,
+          vi_mode=vi_mode, configure=run_config)
+
+
+interpreters = {
+    'python': run_plain,
+    'ipython': run_ipython,
+    'bpython': run_bpython,
+    'ptpython': run_ptpython,
+    'ptipython': run_ptipython,
+}
+
+
+def run_python(interpreter, imported_objects):
+    for name, _run_python in interpreters.items():
+        if interpreter == name:
+            _run_python(imported_objects)
+    else:
+        click.BadParameter('Please select from ' + ', '.join(interpreters.keys()))
+
+
+@cli.command()
+@click.option('-i', '--interpreter', default='python',
+              help="Select python interpreters (default: plain)"
+              "Supported interpreters are ipython, bpython, ptpython and pyipython.")
+@click.option('--models/--no-models', default=False,
+              help="Automatically import SQLAlchemy or peewee's table definition.")
+def shell(interpreter, models):
+    """
+    Runs a python shell.
+
+    Usage:
+
+        $ wsgicli shell
+
+        $ wsgicli shell -i ipython (or bpython, ptpython, ptipython)
+
+        $ wsgicli shell --models
+    """
+    imported_objects = {}
+    run_python(interpreter, imported_objects)
+
+
 if __name__ == '__main__':
-    cmd()
+    cli()
