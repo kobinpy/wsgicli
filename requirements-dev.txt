@@ -1,10 +1,19 @@
+# Testing
 flake8
+
+# Debugging
+ipdb
+
+# Packaging
 twine
 wheel
-ipdb
 
 # Interpreter
 ipython
 bpython
 ptpython
 ptipython
+
+# Supported OR/Mapper
+SQLAlchemy
+peewee

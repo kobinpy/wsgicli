@@ -14,6 +14,7 @@ ipython==5.1.0
 ipython-genutils==0.1.0
 jedi==0.9.0
 mccabe==0.5.2
+peewee==2.8.5
 pexpect==4.2.1
 pickleshare==0.7.4
 pkginfo==1.4.1
@@ -28,10 +29,11 @@ requests==2.12.1
 requests-toolbelt==0.7.0
 simplegeneric==0.8.1
 six==1.10.0
+SQLAlchemy==1.1.4
 traitlets==4.3.1
 twine==1.8.1
 vmprof==0.3.16
 wcwidth==0.1.7
 wsgi-lineprof==0.2.0
 wsgi-static-middleware==0.1.0
--e git+git@github.com:kobinpy/wsgicli.git@cd2dedb5a47d0dd240469c8744573465022b1b27#egg=wsgicli
+-e git+git@github.com:kobinpy/wsgicli.git@2c5036a55f4263d9b65efdbdade112eaa4c2a3c1#egg=wsgicli
