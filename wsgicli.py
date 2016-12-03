@@ -177,6 +177,61 @@ def run(filepath, wsgiapp, host, port, reload, interval,
 #####################################################################################
 # For run shell
 #####################################################################################
+# Find Models
+def import_from_path(import_path):
+    abspath = os.path.abspath(import_path)
+    if not os.path.exists(abspath):
+        raise ValueError('{path} is not a python package.'.format(path=import_path))
+
+    if os.path.isdir(abspath) and os.path.exists(os.path.join(abspath, '__init__.py')):
+        name = abspath.split('/')[-1]
+        return SourceFileLoader(name, os.path.join(abspath, '__init__.py')).load_module()
+    elif abspath.endswith('.py'):
+        name = abspath.split('/')[-1].split('.')[0]
+        return SourceFileLoader(name, abspath).load_module()
+    else:
+        raise ValueError('{path} is not a python package.'.format(path=import_path))
+
+
+def find_modules_from_path(import_path):
+    base_module = import_from_path(import_path)
+    base_path = getattr(base_module, '__path__', None)
+
+    for module in sys.modules.values():
+        path = getattr(module, '__file__', '')
+        if path[-4:] in ('.pyo', '.pyc'):
+            path = path[:-1]
+        if path and os.path.exists(path):
+            # Standard libraries are in lib/python3.x/...
+            # And third party libraries are in lib/python3.x/site-packages/...
+            if 'lib/python' not in path:
+                yield module
+
+
+# Get model base classes
+def _sqlalchemy_model():
+    from sqlalchemy.ext import declarative
+    return declarative.declarative_base()
+
+
+def _peewee_model():
+    from peewee import BaseModel
+    return BaseModel
+
+
+def get_model_base_classes():
+    model_base_classes = []
+    for x in (_sqlalchemy_model, _peewee_model):
+        try:
+            model_base = x()
+        except ImportError:
+            continue
+        else:
+            model_base_classes.append(model_base)
+    return tuple(model_base_classes)
+
+
+# Run shell
 def run_plain(imported_objects):
     import code
     code.interact(local=imported_objects)
@@ -226,12 +281,15 @@ def run_python(interpreter, imported_objects):
 
 
 @cli.command()
+@click.argument('package', nargs=1)
 @click.option('-i', '--interpreter', default='python',
               help="Select python interpreters (default: plain)"
               "Supported interpreters are ipython, bpython, ptpython and pyipython.")
-@click.option('--models/--no-models', default=False,
-              help="Automatically import SQLAlchemy or peewee's table definition.")
-def shell(interpreter, models):
+@click.option('--models/--no-models', default=True,
+              help="Automatically recursively search and import ORM table definition"
+                   " from specified package. Now wsgicli supports SQLAlchemy and peewee."
+                   " (default: ``--models`` )")
+def shell(package, interpreter, models):
     """
     Runs a python shell.
 
@@ -244,6 +302,18 @@ def shell(interpreter, models):
         $ wsgicli shell --models
     """
     imported_objects = {}
+    model_base_classes = get_model_base_classes()
+
+    if models and model_base_classes:
+        for module in find_modules_from_path(package):
+            for name in dir(module):
+                if name.startswith('_'):
+                    continue
+                obj = getattr(module, name)
+                if isinstance(obj, model_base_classes):
+                    key = name.split('.')[-1] if '.' in name else name
+                    click.secho("{} is imported!".format(name), fg='green')
+                    imported_objects[key] = obj
     run_python(interpreter, imported_objects)
 
 
