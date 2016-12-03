@@ -210,8 +210,8 @@ def find_modules_from_path(import_path):
 
 # Get model base classes
 def _sqlalchemy_model():
-    from sqlalchemy.ext import declarative
-    return declarative.declarative_base()
+    from sqlalchemy.ext.declarative import DeclarativeMeta
+    return DeclarativeMeta
 
 
 def _peewee_model():
