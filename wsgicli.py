@@ -181,14 +181,12 @@ def run(filepath, wsgiapp, host, port, reload, interval,
 def import_from_path(import_path):
     abspath = os.path.abspath(import_path)
     if not os.path.exists(abspath):
-        raise ValueError('{path} is not a python package.'.format(path=import_path))
+        raise ValueError('{path} does not exists.'.format(path=import_path))
 
     if os.path.isdir(abspath) and os.path.exists(os.path.join(abspath, '__init__.py')):
-        sys.path.insert(0, abspath)
         name = abspath.split('/')[-1]
         return SourceFileLoader(name, os.path.join(abspath, '__init__.py')).load_module()
     elif abspath.endswith('.py'):
-        sys.path.insert(0, os.path.dirname(abspath))
         name = abspath.split('/')[-1].split('.')[0]
         return SourceFileLoader(name, abspath).load_module()
     else:
@@ -196,8 +194,7 @@ def import_from_path(import_path):
 
 
 def find_modules_from_path(import_path):
-    base_module = import_from_path(import_path)
-    base_path = getattr(base_module, '__path__', None)
+    import_from_path(import_path)
 
     for module in sys.modules.values():
         path = getattr(module, '__file__', '')
@@ -210,11 +207,26 @@ def find_modules_from_path(import_path):
                 yield module
 
 
+def insert_import_path_to_sys_modules(import_path):
+    """
+    When importing a module, Python references the directories in sys.path.
+    The default value of sys.path varies depending on the system, But:
+    When you start Python with a script, the directory of the script is inserted into sys.path[0].
+
+    So we have to replace sys.path to import object in specified scripts.
+    """
+    abspath = os.path.abspath(import_path)
+    if os.path.isdir(abspath):
+        sys.path.insert(0, abspath)
+    else:
+        sys.path.insert(0, os.path.dirname(abspath))
+
+
 # Get model base classes
 def _sqlalchemy_model():
     from sqlalchemy.ext.declarative import DeclarativeMeta
     from sqlalchemy.orm import sessionmaker
-    return [sessionmaker,  DeclarativeMeta]
+    return [sessionmaker, DeclarativeMeta]
 
 
 def _peewee_model():
@@ -302,12 +314,14 @@ def shell(package, interpreter, models):
 
         $ wsgicli shell -i ipython (or bpython, ptpython, ptipython)
 
-        $ wsgicli shell --models
+        $ wsgicli shell
     """
     imported_objects = {}
     model_base_classes = get_model_base_classes()
 
     if models and model_base_classes:
+        insert_import_path_to_sys_modules(package)
+
         for module in find_modules_from_path(package):
             for name in dir(module):
                 if name.startswith('_'):
