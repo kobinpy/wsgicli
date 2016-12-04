@@ -211,12 +211,13 @@ def find_modules_from_path(import_path):
 # Get model base classes
 def _sqlalchemy_model():
     from sqlalchemy.ext.declarative import DeclarativeMeta
-    return DeclarativeMeta
+    from sqlalchemy.orm import sessionmaker
+    return [sessionmaker,  DeclarativeMeta]
 
 
 def _peewee_model():
-    from peewee import BaseModel
-    return BaseModel
+    from peewee import BaseModel, Database
+    return [BaseModel, Database]
 
 
 def get_model_base_classes():
@@ -227,7 +228,7 @@ def get_model_base_classes():
         except ImportError:
             continue
         else:
-            model_base_classes.append(model_base)
+            model_base_classes.extend(model_base)
     return tuple(model_base_classes)
 
 
@@ -312,6 +313,8 @@ def shell(package, interpreter, models):
                 obj = getattr(module, name)
                 if isinstance(obj, model_base_classes):
                     key = name.split('.')[-1] if '.' in name else name
+                    if key in imported_objects.keys():
+                        continue
                     click.secho("{} is imported!".format(name), fg='green')
                     imported_objects[key] = obj
     run_python(interpreter, imported_objects)
