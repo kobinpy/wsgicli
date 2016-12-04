@@ -184,9 +184,11 @@ def import_from_path(import_path):
         raise ValueError('{path} is not a python package.'.format(path=import_path))
 
     if os.path.isdir(abspath) and os.path.exists(os.path.join(abspath, '__init__.py')):
+        sys.path.insert(0, abspath)
         name = abspath.split('/')[-1]
         return SourceFileLoader(name, os.path.join(abspath, '__init__.py')).load_module()
     elif abspath.endswith('.py'):
+        sys.path.insert(0, os.path.dirname(abspath))
         name = abspath.split('/')[-1].split('.')[0]
         return SourceFileLoader(name, abspath).load_module()
     else:
