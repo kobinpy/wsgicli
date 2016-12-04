@@ -11,10 +11,18 @@ WSGICLI
 Command Line Interface for developing WSGI application.
 This library has following features.
 
+**Run WSGI Application in wsgiref**
+
 * Run wsgi application with specified host and port.
 * Serving Static files.
 * Live reloading.
 * line by line profiling.
+
+**Run python interpreter**
+
+* Supported interpreters are python(plain), ipython, bpython, ptpython and ptipython.
+* Automatically import SQLAlchemy and peewee models when run the interpreter.
+
 
 How to use
 ==========
