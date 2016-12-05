@@ -2,6 +2,7 @@ import click
 from importlib.machinery import SourceFileLoader
 import os
 import sys
+import site
 import time
 import threading
 import _thread
@@ -170,7 +171,7 @@ def run(filepath, wsgiapp, host, port, reload, interval,
             # Now wsgi-lineprof is now supported only 1 file checking.
             lineprof_file = lineprof_file[0]
         else:
-            lineprof_file = filepath.split('/')[-1] if '/' in filepath else filepath
+            lineprof_file = os.path.basename(filepath)
         filters = [FilenameFilter(lineprof_file), TotalTimeSorter()]
         app = LineProfilerMiddleware(app, filters=filters)
 
@@ -189,11 +190,12 @@ def import_from_path(import_path):
     if not os.path.exists(abspath):
         raise ValueError('{path} does not exists.'.format(path=import_path))
 
+    basename = os.path.basename(abspath)
     if os.path.isdir(abspath) and os.path.exists(os.path.join(abspath, '__init__.py')):
-        name = abspath.split('/')[-1]
+        name = basename
         return SourceFileLoader(name, os.path.join(abspath, '__init__.py')).load_module()
-    elif abspath.endswith('.py'):
-        name = abspath.split('/')[-1].split('.')[0]
+    elif basename.endswith('.py'):
+        name, _ = os.path.splitext(basename)
         return SourceFileLoader(name, abspath).load_module()
     else:
         raise ValueError('{path} is not a python package.'.format(path=import_path))
@@ -202,6 +204,10 @@ def import_from_path(import_path):
 def find_modules_from_path(import_path):
     import_from_path(import_path)
 
+    parent_path = lambda path: os.path.abspath(os.path.join(path, ".."))
+    site_dirs = site.getsitepackages()
+    lib_dirs = [parent_path(path) for path in site_dirs]
+
     for module in sys.modules.values():
         path = getattr(module, '__file__', '')
         if path[-4:] in ('.pyo', '.pyc'):
@@ -209,7 +215,7 @@ def find_modules_from_path(import_path):
         if path and os.path.exists(path):
             # Standard libraries are in lib/python3.x/...
             # And third party libraries are in lib/python3.x/site-packages/...
-            if 'lib/python' not in path:
+            if all(not path.startswith(lib_dir) for lib_dir in lib_dirs):
                 yield module
 
 
