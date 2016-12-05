@@ -80,8 +80,8 @@ Example
 
    $ wsgicli shell run main.py -i ipython
 
-.. image:: https://raw.githubusercontent.com/kobinpy/wsgicli/master/resources/resources/wsgicli-shell.gif
-   :alt: live reloading demo
+.. image:: https://raw.githubusercontent.com/kobinpy/wsgicli/master/resources/wsgicli-shell.gif
+   :alt: WSGICLI Run Command DEMO
    :align: center
 
 Arguments and Options
