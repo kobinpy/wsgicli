@@ -1,8 +1,8 @@
 import click
 from importlib.machinery import SourceFileLoader
 import os
-import sys
 import site
+import sys
 import time
 import threading
 import _thread
