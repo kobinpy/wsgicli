@@ -139,42 +139,48 @@ refs:
 Arguments and Options
 =====================
 
-Arguments
----------
+Run command
+-----------
 
-1. ``file`` : File path for your wsgi application.
-2. ``obj`` : The variable name of your wsgi application object.
+===========  ====================  ========================================================
+Argument     Environment Variable  Description
+===========  ====================  ========================================================
+1. FILE      WSGICLI_FILE          The file path for your WSGI application.
+2. WSGIAPP   WSGICLI_WSGI_APP      The variable name of your wsgi application object.
+===========  ====================  ========================================================
 
-Options
--------
+==================================  =================  =====================  ========================================================
+Options                             Default            Environment Variable   Description
+==================================  =================  =====================  ========================================================
+``-h`` ``--host``                   ``127.0.0.1``      WSGICLI_HOST           The hostname to bind to.
+``-p`` ``--port``                   8000               WSGICLI_PORT           The port to bind to.
+``--reload`` / ``--no-reload``      False              WSGICLI_RELOAD         Enable live reloading.
+``--interval``                      1                  WSGICLI_INTERVAL       Interval time to check file changed for reloading (sec).
+``--static`` / ``--no-static``      False              WSGICLI_STATIC         Enable static file serving.
+``--static-root``                   ``/static/``       WSGICLI_STATIC_ROOT    URL path to static files.
+``--static-dirs``                   ``['./static/']``  WSGICLI_STATIC_DIRS    Directories to static files (multiple).
+``--lineprof`` / ``--no-lineprof``  False              WSGICLI_LINEPROF       Enable line profiler.
+``--lineprof-file``                 WSGIAPP(2nd arg)   WSGICLI_LINEPROF_FILE  The filename profiled by line-profiler.
+``--validate`` / ``--no-validate``  False              WSGICLI_VALIDATE       Validating your WSGI application complying with PEP3333.
+==================================  =================  =====================  ========================================================
 
-- ``-h`` ``--host`` : The interface to bind to. (default: ``127.0.0.1``).
-- ``-p`` ``--port`` : The port to bind to. (default: ``8000``).
-- ``--reload`` / ``--no-reload`` : Enable live reloading (default: ``--no-reload``).
-- ``--interval`` : Interval time to check file changed for reloading (default: ``1``).
-- ``--static`` / ``--no-static`` : Enable static file serving (default: ``--no-static``).
-- ``--staticroot`` : URL path to static files (default: ``/static/``).
-- ``--staticdirs`` : Directories to static files (default: ``./static``, multiple=true).
-- ``--lineprof/--no-lineprof`` : Enable line profiler.
-- ``--lineprof-file`` : The target for lineprof (default: your wsgi application file name).
-- ``--validate/--no-validate`` : Validating your WSGI application complying with PEP3333 compliance.
 
-Environment Variables
----------------------
+Shell command
+-------------
 
-**Still Not Implemented**
+===========  ====================  ========================================================
+Argument     Environment Variable  Description
+===========  ====================  ========================================================
+1. FILE      WSGICLI_FILE          The file path for your WSGI application.
+===========  ====================  ========================================================
 
-- ``WSGICLI_TARGET``
-- ``WSGICLI_PORT``
-- ``WSGICLI_HOST``
-- ``WSGICLI_RELOAD``
-- ``WSGICLI_RELOAD_INTERVAL``
-- ``WSGICLI_STATIC``
-- ``WSGICLI_STATIC_ROOT``
-- ``WSGICLI_STATIC_DIRS``
-- ``WSGICLI_PROFILE``
-- ``WSGICLI_PROFILE_PORT``
-- ``WSGICLI_VALIDATE``
+==================================  =================  =====================  ====================================================================
+Options                             Default            Environment Variable   Description
+==================================  =================  =====================  ====================================================================
+``-i`` ``--interpreter``            'python'           WSGICLI_INTERPRETER    Supported interpreters are ipython, bpython, ptpython and ptipython.
+``--models`` / ``--no-models``      True               WSGICLI_MODELS         Automatically import ORM table definition from your app.
+==================================  =================  =====================  ====================================================================
+
 
 Why WSGICLI?
 ============

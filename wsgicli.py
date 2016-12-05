@@ -120,21 +120,27 @@ def run_live_reloading_server(interval, app, host, port):
 
 
 @cli.command()
-@click.argument('filepath', nargs=1)
-@click.argument('wsgiapp', nargs=1)
-@click.option('--host', '-h', type=click.STRING, default='127.0.0.1',
+@click.argument('filepath', nargs=1, envvar='WSGICLI_FILE')
+@click.argument('wsgiapp', nargs=1, envvar='WSGICLI_WSGI_APP')
+@click.option('--host', '-h', type=click.STRING, default='127.0.0.1', envvar='WSGICLI_HOST',
               help='The interface to bind to.')
-@click.option('--port', '-p', type=click.INT, default=8000, help='The port to bind to.')
-@click.option('--reload/--no-reload', default=None, help='Enable live reloading')
-@click.option('--interval', type=click.INT, default=1,
+@click.option('--port', '-p', type=click.INT, default=8000, envvar='WSGICLI_PORT',
+              help='The port to bind to.')
+@click.option('--reload/--no-reload', default=None, envvar='WSGICLI_RELOAD',
+              help='Enable live reloading')
+@click.option('--interval', type=click.INT, default=1, envvar='WSGICLI_INTERVAL',
               help='Interval time to check file changed for reloading')
-@click.option('--static/--no-static', default=None, help='Enable static file serving')
-@click.option('--static-root', default='static', help='URL path to static files')
-@click.option('--static-dirs', default=['./static/'], multiple=True,
+@click.option('--static/--no-static', default=None, envvar='WSGICLI_STATIC',
+              help='Enable static file serving')
+@click.option('--static-root', default='static', envvar='WSGICLI_STATIC_ROOT',
+              help='URL path to static files')
+@click.option('--static-dirs', default=['./static/'], multiple=True, envvar='WSGICLI_STATIC_DIRS',
               help='Directories for static files')
-@click.option('--lineprof/--no-lineprof', help='Enable line profiler')
-@click.option('--lineprof-file', multiple=True, help='The filename profiled by line-profiler')
-@click.option('--validate/--no-validate', default=False,
+@click.option('--lineprof/--no-lineprof', envvar='WSGICLI__LINEPROF',
+              help='Enable line profiler')
+@click.option('--lineprof-file', multiple=True, envvar='WSGICLI_LINEPROF_FILE',
+              help='The filename profiled by line-profiler')
+@click.option('--validate/--no-validate', default=False, envvar='WSGICLI_VALIDATE',
               help='Validating your WSGI application complying with PEP3333 compliance.')
 def run(filepath, wsgiapp, host, port, reload, interval,
         static, static_root, static_dirs, lineprof, lineprof_file, validate):
@@ -305,15 +311,15 @@ def run_python(interpreter, imported_objects):
 
 
 @cli.command()
-@click.argument('package', nargs=1)
-@click.option('-i', '--interpreter', default='python',
+@click.argument('filepath', nargs=1, envvar='WSGICLI_FILE_PATH')
+@click.option('-i', '--interpreter', default='python', envvar='WSGICLI_INTERPRETER',
               help="Select python interpreters (default: plain)"
-              "Supported interpreters are ipython, bpython, ptpython and pyipython.")
-@click.option('--models/--no-models', default=True,
+              "Supported interpreters are ipython, bpython, ptpython and ptipython.")
+@click.option('--models/--no-models', default=True, envvar='WSGICLI_SHELL_MODELS',
               help="Automatically recursively search and import ORM table definition"
                    " from specified package. Now wsgicli supports SQLAlchemy and peewee."
                    " (default: ``--models`` )")
-def shell(package, interpreter, models):
+def shell(filepath, interpreter, models):
     """
     Runs a python shell.
 
@@ -322,16 +328,14 @@ def shell(package, interpreter, models):
         $ wsgicli shell
 
         $ wsgicli shell -i ipython (or bpython, ptpython, ptipython)
-
-        $ wsgicli shell
     """
     imported_objects = {}
     model_base_classes = get_model_base_classes()
 
     if models and model_base_classes:
-        insert_import_path_to_sys_modules(package)
+        insert_import_path_to_sys_modules(filepath)
 
-        for module in find_modules_from_path(package):
+        for module in find_modules_from_path(filepath):
             for name in dir(module):
                 if name.startswith('_'):
                     continue
