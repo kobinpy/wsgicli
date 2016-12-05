@@ -212,8 +212,6 @@ def find_modules_from_path(import_path):
         if path[-4:] in ('.pyo', '.pyc'):
             path = path[:-1]
         if path and os.path.exists(path):
-            # Standard libraries are in lib/python3.x/...
-            # And third party libraries are in lib/python3.x/site-packages/...
             if all(not path.startswith(lib_dir) for lib_dir in lib_dirs):
                 yield module
 
