@@ -338,7 +338,7 @@ def shell(package, interpreter, models):
                 obj = getattr(module, name)
                 if isinstance(obj, model_base_classes):
                     key = name.split('.')[-1] if '.' in name else name
-                    if key in imported_objects.keys():
+                    if key in imported_objects:
                         continue
                     click.secho("{} is imported!".format(name), fg='green')
                     imported_objects[key] = obj
