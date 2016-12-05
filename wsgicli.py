@@ -133,8 +133,10 @@ def run_live_reloading_server(interval, app, host, port):
               help='Directories for static files')
 @click.option('--lineprof/--no-lineprof', help='Enable line profiler')
 @click.option('--lineprof-file', multiple=True, help='The filename profiled by line-profiler')
+@click.option('--validate/--no-validate', default=False,
+              help='Validating your WSGI application complying with PEP3333 compliance.')
 def run(filepath, wsgiapp, host, port, reload, interval,
-        static, static_root, static_dirs, lineprof, lineprof_file):
+        static, static_root, static_dirs, lineprof, lineprof_file, validate):
     """
     Runs a development server for WSGI Application.
 
@@ -154,6 +156,10 @@ def run(filepath, wsgiapp, host, port, reload, interval,
     if static:
         from wsgi_static_middleware import StaticMiddleware
         app = StaticMiddleware(app, static_root=static_root, static_dirs=static_dirs)
+
+    if validate:
+        from wsgiref.validate import validator
+        app = validator(app)
 
     if lineprof:
         # Caution: wsgi-lineprof is still pre-alpha. Except breaking API Changes.

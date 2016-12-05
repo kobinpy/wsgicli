@@ -17,6 +17,7 @@ This library has following features.
 * Serving Static files.
 * Live reloading.
 * line by line profiling.
+* Validating your WSGI application complying with PEP3333 compliance.
 
 **Run python interpreter**
 
@@ -156,6 +157,7 @@ Options
 - ``--staticdirs`` : Directories to static files (default: ``./static``, multiple=true).
 - ``--lineprof/--no-lineprof`` : Enable line profiler.
 - ``--lineprof-file`` : The target for lineprof (default: your wsgi application file name).
+- ``--validate/--no-validate`` : Validating your WSGI application complying with PEP3333 compliance.
 
 Environment Variables
 ---------------------
@@ -172,6 +174,7 @@ Environment Variables
 - ``WSGICLI_STATIC_DIRS``
 - ``WSGICLI_PROFILE``
 - ``WSGICLI_PROFILE_PORT``
+- ``WSGICLI_VALIDATE``
 
 Why WSGICLI?
 ============
