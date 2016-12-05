@@ -204,7 +204,9 @@ def import_from_path(import_path):
 def find_modules_from_path(import_path):
     import_from_path(import_path)
 
-    parent_path = lambda path: os.path.abspath(os.path.join(path, ".."))
+    def parent_path(path):
+        return os.path.abspath(os.path.join(path, ".."))
+
     site_dirs = site.getsitepackages()
     lib_dirs = [parent_path(path) for path in site_dirs]
 
