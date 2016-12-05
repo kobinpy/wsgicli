@@ -204,11 +204,8 @@ def import_from_path(import_path):
 def find_modules_from_path(import_path):
     import_from_path(import_path)
 
-    def parent_path(path):
-        return os.path.abspath(os.path.join(path, ".."))
-
     site_dirs = site.getsitepackages()
-    lib_dirs = [parent_path(path) for path in site_dirs]
+    lib_dirs = [os.path.dirname(path) for path in site_dirs]
 
     for module in sys.modules.values():
         path = getattr(module, '__file__', '')
