@@ -46,7 +46,7 @@ Arguments and Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 ==  =========  ====================  ========================================================
-    Argument   Environment Variable  Description
+No  Argument   Environment Variable  Description
 ==  =========  ====================  ========================================================
  1  FILE       WSGICLI_FILE          The file path for your WSGI application.
  2  WSGIAPP    WSGICLI_WSGI_APP      The variable name of your wsgi application object.
@@ -86,7 +86,7 @@ Arguments and Options
 ~~~~~~~~~~~~~~~~~~~~~
 
 ==  ===========  ====================  ========================================================
-    Arguments    Environment Variable  Description
+No  Arguments    Environment Variable  Description
 ==  ===========  ====================  ========================================================
  1  FILE         WSGICLI_FILE          The file path for your WSGI application.
 ==  ===========  ====================  ========================================================
