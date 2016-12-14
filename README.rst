@@ -31,24 +31,17 @@ Commands
 Run command
 -----------
 
-Example
-~~~~~~~
+Synopsis
+~~~~~~~~
 
 .. code-block:: console
 
-   $ wsgicli run main.py app -p 8080 --reload
-
-.. image:: https://raw.githubusercontent.com/kobinpy/wsgicli/master/resources/wsgicli-live-reloading-demo.gif
-   :alt: WSGICLI Run Command DEMO
-   :align: center
-
-Arguments and Options
-~~~~~~~~~~~~~~~~~~~~~
+   $ wsgicli run [FILEPATH] [WSGIAPP] [Options]
 
 ==  =========  ====================  ========================================================
 No  Arguments  Environment Variable  Description
 ==  =========  ====================  ========================================================
- 1  FILE       ``WSGICLI_FILE``      The file path for your WSGI application.
+ 1  FILEPATH   ``WSGICLI_FILE``      The file path for your WSGI application.
  2  WSGIAPP    ``WSGICLI_WSGI_APP``  The variable name of your wsgi application object.
 ==  =========  ====================  ========================================================
 
@@ -65,25 +58,30 @@ Options                             Environment Variable       Default          
 ``--lineprof`` / ``--no-lineprof``  ``WSGICLI_LINEPROF``       False              Enable line profiler.
 ``--lineprof-file``                 ``WSGICLI_LINEPROF_FILE``  WSGIAPP(2nd arg)   The filename profiled by line-profiler.
 ``--validate`` / ``--no-validate``  ``WSGICLI_VALIDATE``       False              Validating your WSGI application complying with PEP3333.
+``--help``                                                                        Show help text.
 ==================================  =========================  =================  ====================================================================
-
-
-Shell command
--------------
 
 Example
 ~~~~~~~
 
 .. code-block:: console
 
-   $ wsgicli shell main.py --interpreter ipython
+   $ wsgicli run main.py app -p 8080 --reload
 
-.. image:: https://raw.githubusercontent.com/kobinpy/wsgicli/master/resources/wsgicli-shell-demo.gif
+.. image:: https://raw.githubusercontent.com/kobinpy/wsgicli/master/resources/wsgicli-live-reloading-demo.gif
    :alt: WSGICLI Run Command DEMO
    :align: center
 
-Arguments and Options
-~~~~~~~~~~~~~~~~~~~~~
+
+Shell command
+-------------
+
+Synopsis
+~~~~~~~~
+
+.. code-block:: console
+
+   $ wsgicli shell [FILE] [Options]
 
 ==  =========  ====================  ========================================================
 No  Arguments  Environment Variable  Description
@@ -96,7 +94,20 @@ Options                             Environment Variable      Default         De
 ==================================  ========================  ==============  ====================================================================
 ``-i`` ``--interpreter``            ``WSGICLI_INTERPRETER``   ``'python'``    Supported interpreters are ipython, bpython, ptpython and ptipython.
 ``--models`` / ``--no-models``      ``WSGICLI_MODELS``        True            Automatically import ORM table definition from your app.
+``--help``                                                                    Show help text.
 ==================================  ========================  ==============  ====================================================================
+
+
+Example
+~~~~~~~
+
+.. code-block:: console
+
+   $ wsgicli shell main.py --interpreter ipython
+
+.. image:: https://raw.githubusercontent.com/kobinpy/wsgicli/master/resources/wsgicli-shell-demo.gif
+   :alt: WSGICLI Run Command DEMO
+   :align: center
 
 
 Requirements
