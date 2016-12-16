@@ -149,13 +149,9 @@ def run(filepath, wsgiapp, host, port, reload, interval,
 
     Usage:
 
-        $ wsgicli run hello.py app -h 0.0.0.0 -p 5000
-
-        $ wsgicli run hello.py app --reload
+        $ wsgicli run hello.py app -h 0.0.0.0 -p 5000 --reload
 
         $ wsgicli run hello.py app --static --static-root /static/ --static-dirs ./static/
-
-        $ wsgicli run hello.py app --lineprof
     """
     module = SourceFileLoader('module', filepath).load_module()
     app = getattr(module, wsgiapp)
@@ -312,6 +308,7 @@ def run_python(interpreter, imported_objects):
 
 @cli.command()
 @click.argument('filepath', nargs=1, envvar='WSGICLI_FILE_PATH')
+@click.argument('wsgiapp', nargs=1, envvar='WSGICLI_WSGI_APP')
 @click.option('-i', '--interpreter', default='python', envvar='WSGICLI_INTERPRETER',
               help="Select python interpreters (default: plain)"
               "Supported interpreters are ipython, bpython, ptpython and ptipython.")
@@ -319,18 +316,16 @@ def run_python(interpreter, imported_objects):
               help="Automatically recursively search and import ORM table definition"
                    " from specified package. Now wsgicli supports SQLAlchemy and peewee."
                    " (default: ``--models`` )")
-def shell(filepath, interpreter, models):
+def shell(filepath, wsgiapp, interpreter, models):
     """
     Runs a python shell.
 
     Usage:
 
-        $ wsgicli shell
-
-        $ wsgicli shell -i ipython (or bpython, ptpython, ptipython)
+        $ wsgicli shell app.py app -i ipython
     """
-    imported_objects = {}
     model_base_classes = get_model_base_classes()
+    imported_objects = {}
 
     if models and model_base_classes:
         insert_import_path_to_sys_modules(filepath)
@@ -344,8 +339,13 @@ def shell(filepath, interpreter, models):
                     key = name.split('.')[-1] if '.' in name else name
                     if key in imported_objects:
                         continue
-                    click.secho("{} is imported!".format(name), fg='green')
                     imported_objects[key] = obj
+
+    module = SourceFileLoader('module', filepath).load_module()
+    imported_objects['app'] = getattr(module, wsgiapp)
+
+    for key in imported_objects.keys():
+        click.secho("import {}".format(key), fg='green')
     run_python(interpreter, imported_objects)
 
 

@@ -81,13 +81,14 @@ Synopsis
 
 .. code-block:: console
 
-   $ wsgicli shell [FILE] [Options]
+   $ wsgicli shell [FILEPATH] [WSGIAPP] [Options]
 
-==  =========  ====================  ========================================================
-No  Arguments  Environment Variable  Description
-==  =========  ====================  ========================================================
- 1  FILE       ``WSGICLI_FILE``      The file path for your WSGI application.
-==  =========  ====================  ========================================================
+==  =========  =====================  ========================================================
+No  Arguments  Environment Variable   Description
+==  =========  =====================  ========================================================
+ 1  FILEPATH   ``WSGICLI_FILE_PATH``  The file path for your WSGI application.
+ 2  WSGIAPP    ``WSGICLI_WSGI_APP``   The variable name of your wsgi application object.
+==  =========  =====================  ========================================================
 
 ==================================  ========================  ==============  ====================================================================
 Options                             Environment Variable      Default         Description
@@ -103,7 +104,7 @@ Example
 
 .. code-block:: console
 
-   $ wsgicli shell main.py --interpreter ipython
+   $ wsgicli shell main.py app --interpreter ipython
 
 .. image:: https://raw.githubusercontent.com/kobinpy/wsgicli/master/resources/wsgicli-shell-demo.gif
    :alt: WSGICLI Run Command DEMO
