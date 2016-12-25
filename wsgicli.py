@@ -120,7 +120,7 @@ def run_live_reloading_server(interval, app, host, port):
 
 
 @cli.command()
-@click.argument('filepath', nargs=1, envvar='WSGICLI_FILE')
+@click.argument('filepath', nargs=1, envvar='WSGICLI_FILE', type=click.Path(exists=True))
 @click.argument('wsgiapp', nargs=1, envvar='WSGICLI_WSGI_APP')
 @click.option('--host', '-h', type=click.STRING, default='127.0.0.1', envvar='WSGICLI_HOST',
               help='The interface to bind to.')
@@ -153,6 +153,7 @@ def run(filepath, wsgiapp, host, port, reload, interval,
 
         $ wsgicli run hello.py app --static --static-root /static/ --static-dirs ./static/
     """
+    insert_import_path_to_sys_modules(filepath)
     module = SourceFileLoader('module', filepath).load_module()
     app = getattr(module, wsgiapp)
 
@@ -307,7 +308,7 @@ def run_python(interpreter, imported_objects):
 
 
 @cli.command()
-@click.argument('filepath', nargs=1, envvar='WSGICLI_FILE_PATH')
+@click.argument('filepath', nargs=1, envvar='WSGICLI_FILE_PATH', type=click.Path(exists=True))
 @click.argument('wsgiapp', nargs=1, envvar='WSGICLI_WSGI_APP')
 @click.option('-i', '--interpreter', default='python', envvar='WSGICLI_INTERPRETER',
               help="Select python interpreters (default: plain)"
